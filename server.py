@@ -4,21 +4,26 @@ import faiss
 import json
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import os
+
 
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)  # Enable CORS for local development
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Initialize Cohere
 api_key = 'KXOoiAr2pDbhgnNNzg7NwJ8ZTPGhH5VIf00Av9q1'
 cohere_client = cohere.Client(api_key)
 
 # Load your chunks data (replace with your actual path)
-with open('F:/chatbot-ai/data/chunk_meta.json', 'r', encoding='utf-8') as f:
+chunk_meta_path = os.path.join(BASE_DIR, 'data', 'chunk_meta.json')
+with open(chunk_meta_path, 'r', encoding='utf-8') as f:
     your_data = json.load(f)
 
 # Load FAISS index
-index_file_path = 'F:/chatbot-ai/data/faiss_index.idx'  # replace with correct path
+index_file_path = os.path.join(BASE_DIR, 'data', 'faiss_index.idx')
 index = faiss.read_index(index_file_path)
 
 # Embedding function using Cohere
